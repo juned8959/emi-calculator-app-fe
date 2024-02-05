@@ -1,0 +1,94 @@
+<div class="container">
+  <nav class="navbar bg-body-tertiary">
+    <h1 class="navbar-brand" href="#">Emi Calculator</h1>
+  </nav>
+  <form [formGroup]="emiForm" (ngSubmit)="onSubmit()" class="loan-form">
+    <div class="form-group mb-3">
+      <label for="principal">Loan Value(€):</label>
+      <input
+        type="number"
+        formControlName="principal"
+        id="principal"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          emiForm.get('principal')?.errors && emiForm.get('principal')?.touched
+        "
+        class="text-danger error-message"
+      >
+        Loan amount must be greater than zero and less than a billion.
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="yearlyRateOfInterest">Yearly Interest Rate(%):</label>
+      <input
+        type="number"
+        formControlName="yearlyRateOfInterest"
+        id="yearlyRateOfInterest"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          emiForm.get('yearlyRateOfInterest')?.errors &&
+          emiForm.get('yearlyRateOfInterest')?.touched
+        "
+        class="text-danger error-message"
+      >
+        Yearly rate of interest must be between zero and hundred.
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="loanTerm">Loan Term in Years:</label>
+      <input
+        type="number"
+        formControlName="tenureInYears"
+        id="tenureInYears"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          emiForm.get('tenureInYears')?.errors &&
+          emiForm.get('tenureInYears')?.touched
+        "
+        class="text-danger error-message"
+      >
+        Loan term must be between zero and thirty.
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        formControlName="email"
+        id="email"
+        class="form-control"
+      />
+      <div
+        *ngIf="emiForm.get('email')?.errors && emiForm.get('email')?.touched"
+        class="text-danger error-message"
+      >
+        Please enter a valid email.
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!emiForm.valid || loading"
+    >
+      Calculate EMI
+    </button>
+    <button type="reset" class="btn btn-secondary mx-2">Reset</button>
+  </form>
+
+  <div *ngIf="!loading && !hasError && monthlyInstallment">
+    <h2>Monthly Installment:</h2>
+    <p>{{ monthlyInstallment | currency : "EUR" }}</p>
+  </div>
+  <div class="spinner-border" role="status" *ngIf="loading">
+    <span class="visually-hidden"> Loading...</span>
+  </div>
+  <div *ngIf="!loading && hasError" class="text-danger error-message">
+    There is a technical error, please try again later.
+  </div>
+</div>
